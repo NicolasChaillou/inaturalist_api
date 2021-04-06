@@ -1,0 +1,10 @@
+{
+    "site": "https://www.inaturalist.org",
+    "api_token": "",
+    "api_token_endpoint": "https://www.inaturalist.org/users/api_token",
+    "app_id": "",
+    "app_secret": "",
+    "redirect_uri": "",
+    "access_token": "",
+    "created_at": 1
+}
