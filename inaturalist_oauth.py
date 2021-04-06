@@ -3,6 +3,8 @@ import json
 import requests
 import  argparse
 
+from config import print_config_as_env
+
 # NOTE: API Tokens expire after 24 hours. You can request another with the access token you generate with this script.
 
 code_regex = re.compile(r"code=(\w+)")
@@ -65,10 +67,12 @@ def main():
     group = parser.add_mutually_exclusive_group(required=True)
     group.add_argument("--auth", "-a", action="store_true", help="Generate access token")
     group.add_argument("--api", "-p", action="store_true", help="Fetch new API token")
+    group.add_argument("--output", "-o", action="store_true", help="Print out config in .env format")
     args = parser.parse_args()
 
     config = load_config()
     if args.auth: generate_access_token(config)
     elif args.api: refresh_api_token(config)
+    elif args.output: print_config_as_env(config)
 
 main()
