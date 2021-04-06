@@ -2,30 +2,18 @@ import os
 import re
 import json
 import requests
-import  argparse
+import argparse
 
+from config import initialize_config
 from fastapi import FastAPI
 from typing import Optional
 from dotenv import load_dotenv
 load_dotenv()
 
-config = {}
-try:
-    config["site"] = str(os.getenv("site"))
-    config["api_token"] = str(os.getenv("api_token"))
-    config["api_token_endpoint"] = str(os.getenv("api_token_endpoint"))
-    config["access_token"] = str(os.getenv("access_token"))
-    config["app_id"] = str(os.getenv("app_id"))
-    config["app_secret"] = str(os.getenv("app_secret"))
-    config["redirect_uri"] = str(os.getenv("redirect_uri"))
-    config["created_at"] = int(os.getenv("created_at"))
-    config["request_endpoint"] = str(os.getenv("request_endpoint"))
-except Exception as err:
-    print("Problem getting environment variables.")
-    exit()
-
-
 app = FastAPI()
+config = {}
+initialize_config()
+
 
 @app.get("/observations")
 def get_observations(long: float, lat: float):
@@ -36,3 +24,15 @@ def get_observations(long: float, lat: float):
     else:
         print(f"Failed request: {response}")
 
+
+def refresh_token():
+    '''
+    This function will request a new access_token, which is needed to make authenticated requests to iNaturalist.
+    This access_token expires every 24 hours, so the function should be run at least once a day.
+    '''
+    headers = { "Authorization": f"Bearer {config['access_token']}" }
+    response = requests.get(config["api_token_endpoint"], headers=headers)
+    if response.status_code == 200:
+        config["api_token"] = response.json()["api_token"]
+    else:
+        print(f"Failed to fetch new API token. Try refreshing your access token.\n{response}")
