@@ -12,7 +12,7 @@ load_dotenv()
 
 app = FastAPI()
 config = {}
-initialize_config()
+initialize_config(config)
 
 
 @app.get("/observations")

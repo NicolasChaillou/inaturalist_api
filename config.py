@@ -1,4 +1,6 @@
-def initialize_config():
+import os
+
+def initialize_config(config):
     try:
         config["site"] = str(os.getenv("site"))
         config["api_token"] = str(os.getenv("api_token"))
