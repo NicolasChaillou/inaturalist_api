@@ -3,7 +3,7 @@ import json
 import requests
 import  argparse
 
-from config import print_config_as_env
+from config_helper import print_config_as_env
 
 # NOTE: API Tokens expire after 24 hours. You can request another with the access token you generate with this script.
 
