@@ -10,23 +10,29 @@ from config_helper import print_config_as_env
 code_regex = re.compile(r"code=(\w+)")
 
 
-def load_config():
+def load_config(config_file):
     try:
-        with open("config.json") as f:
+        with open(config_file) as f:
             config = json.load(f)
         return config
     except IOError as err:
         print("Config not found")
         exit()
 
-def request_auth_code(config):
-    url = f"{config['site']}/oauth/authorize?client_id={config['app_id']}&redirect_uri={config['redirect_uri']}&response_type=code"
-    print(f"Click this link to approve this request:\n{url}")
+def get_input(txt):
+    return input(txt)
 
-    redirect_uri = input(f"\n\nPlease enter the full redirect link: ")
-    if code := code_regex.search(redirect_uri):
-        auth_code = code.group(1)
-    return auth_code
+def request_auth_code(config):
+    try:
+        url = f"{config['site']}/oauth/authorize?client_id={config['app_id']}&redirect_uri={config['redirect_uri']}&response_type=code"
+        print(f"Click this link to approve this request:\n{url}")
+
+        redirect_uri = get_input(f"\n\nPlease enter the full redirect link: ")
+        if code := code_regex.search(redirect_uri):
+            auth_code = code.group(1)
+        return auth_code
+    except Exception as err:
+        raise Exception("Missing a required parameter from the config.")
 
 def request_auth_token(config, auth_code):
     url = f"{config['site']}/oauth/authorize?client_id={config['app_id']}&redirect_uri={config['redirect_uri']}&response_type=code"
@@ -70,7 +76,7 @@ def main():
     group.add_argument("--output", "-o", action="store_true", help="Print out config in .env format")
     args = parser.parse_args()
 
-    config = load_config()
+    config = load_config("config.json")
     if args.auth: generate_access_token(config)
     elif args.api: refresh_api_token(config)
     elif args.output: print_config_as_env(config)
