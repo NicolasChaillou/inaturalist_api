@@ -22,7 +22,6 @@ def refresh_token():
     This function will request a new access_token, which is needed to make authenticated requests to iNaturalist.
     This access_token expires every 24 hours, so the function should be run at least once a day.
     '''
-    # threading.Timer(60, refresh_token).start()
     while True:
         time.sleep(36000)
         headers = { "Authorization": f"Bearer {config['access_token']}" }
