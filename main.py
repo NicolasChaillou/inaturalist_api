@@ -39,6 +39,10 @@ refresh_thread.start()
 
 @app.get("/observations")
 def get_observations(lng: float, lat: float):
+    '''
+    Send Authenticated query to iNaturalist to retrieve observations within
+    a radius around the user's longitude and latitude.
+    '''
     if not valid_lng_lat(lng, lat):
         return { "err": "Invalid coordinates."}
 
@@ -72,6 +76,9 @@ def get_observations(lng: float, lat: float):
 
 
 def valid_lng_lat(lng: float, lat: float):
+    '''
+    Validate longitude and latitude from incoming request.
+    '''
     if (abs(lng) > 180 or abs(lat) > 90): 
         return False
     return True

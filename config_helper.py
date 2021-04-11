@@ -1,6 +1,9 @@
 import os
 
 def initialize_config(config):
+    '''
+    Setup config dictionary values from the environment.
+    '''
     try:
         config["site"] = str(os.getenv("site"))
         config["api_token"] = str(os.getenv("api_token"))
@@ -16,5 +19,8 @@ def initialize_config(config):
         exit()
 
 def print_config_as_env(config):
+    '''
+    Print the config.json in a way that can be stored in a .env
+    '''
     for k,v in config.items():
         print(f'{k} = {v}')
