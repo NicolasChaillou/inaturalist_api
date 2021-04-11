@@ -17,7 +17,4 @@ def initialize_config(config):
 
 def print_config_as_env(config):
     for k,v in config.items():
-        if k == 'created_at':
-            print(f'{k} = {v}')
-            continue
-        print(f'{k} = "{v}"')
+        print(f'{k} = {v}')
