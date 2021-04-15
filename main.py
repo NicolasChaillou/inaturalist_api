@@ -4,6 +4,7 @@ import json
 import requests
 import argparse
 
+from parse_query import parse_query
 from config import initialize_config
 from fastapi import FastAPI
 from typing import Optional
@@ -16,10 +17,32 @@ initialize_config(config)
 
 
 @app.get("/observations")
-def get_observations(long: float, lat: float):
+def get_observations(longitude: float, lat: float):
     headers = {"Authentication": config['access_token']}
-    response = requests.get(f"{config['request_endpoint']}/users/your_user_here", headers=headers)
+    
+    query = {
+        "captive": "false",
+        "endemic": "true",
+        "geo": "true",
+        "identified": "true",
+        "mappable": "true",
+        "native": "true",
+        "photos": "true",
+        "identifications": "most_agree",
+        "lat": lat,
+        "lng": longitude,
+        "radius": 5,
+        "page": 1,
+        "per_page": 15,
+        "order": "desc",
+        "order_by": "created_at"
+    }
+
+    
+    response = requests.get(f"{config['request_endpoint']}/observations", params=query, headers=headers)
+    
     if response.status_code == 200:
+        parsed_response = parse_query(response.json())
         return response.json()
     else:
         print(f"Failed request: {response}")
