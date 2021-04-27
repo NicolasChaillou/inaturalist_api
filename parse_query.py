@@ -5,11 +5,14 @@ def parse_query(response):
     result = {}
     result['results'] = []
 
-    for p in info['results']:
+    for p in response['results']:
         result['results'].append({
             'id': p['id'],
             'species_guess': p['species_guess'],
-            'location': p['location']
+            'longitude': p['geojson']['coordinates'][0],
+            'latitude': p['geojson']['coordinates'][1],
+            'wiki': p['taxon']['wikipedia_url'],
+            'photo': p['taxon']['default_photo']['url']
             })
 
     return result
