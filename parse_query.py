@@ -2,9 +2,6 @@ import os
 import json
 
 def parse_query(response):
-    with open(response) as f:
-        info = json.load(f)
-
     result = {}
     result['results'] = []
 
