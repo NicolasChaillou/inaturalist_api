@@ -42,8 +42,7 @@ def get_observations(longitude: float, lat: float):
     response = requests.get(f"{config['request_endpoint']}/observations", params=query, headers=headers)
     
     if response.status_code == 200:
-        parsed_response = parse_query(response.json())
-        return response.json()
+        return parse_query(response.json())
     else:
         print(f"Failed request: {response}")
 
