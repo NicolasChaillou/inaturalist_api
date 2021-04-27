@@ -15,8 +15,4 @@ def parse_query(response):
             'location': p['location']
             })
 
-    file_name = 'results.json'
-    with open(os.path.abspath(file_name), 'w') as f:
-        json.dump(result, f, indent=4)
-
-    return file_name
+    return result
