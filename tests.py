@@ -10,8 +10,10 @@ from unittest import main as unittest_main
 from fastapi.testclient import TestClient
 from main import app
 
-import config as config_helper
+from config_helper import initialize_config
+from config_helper import print_config_as_env
 from parse_query import parse_query
+
 
 # No unit tests for inaturalist_oath since it is a script, not a module
 
@@ -37,11 +39,18 @@ sample_file = {
         {
             "id": 1234,
             "species_guess": "rattlesnake",
-            "longitude": 1,
-            "latitude": 1,
+            "geojson": {
+                "coordinates": [
+                    1.0,   # Longitude
+                    1.0     # Latitude
+                ],
+                "type": "Point",
+            },
             "taxon": {
-                "wiki": "www.abc.com",
-                "photo": "www.url.com"
+                "wikipedia_url": "www.abc.com",
+                "default_photo": {
+                    "url": "www.url.com"
+                }
             },
             "site_id": 90
         }
@@ -52,10 +61,15 @@ sample_output = {
     "results": [
         {
             "id": 1234,
-            "species_guess": "rattlesnake"
+            "species_guess": "rattlesnake",
+            "longitude": 1.0,
+            "latitude": 1.0,
+            "wiki": "www.abc.com",
+            "photo": "www.url.com"
         }
     ]
 }
+
 
 class TestAPI(TestCase):
     def test_get_observations(self):
@@ -97,7 +111,7 @@ class TestConfigHelper(TestCase):
     def test_initialize_config(self):
         # Assumes you have authentication information inside your environment
         config = {}
-        config_helper.initialize_config(config)
+        initialize_config(config)
         config["created_at"] = str(config["created_at"])
         self.assertEqual(config, sample_env)
 
@@ -106,7 +120,7 @@ class TestConfigHelper(TestCase):
         output = io.StringIO()
         sys.stdout = output
         sample_env["created_at"] = 1
-        config_helper.print_config_as_env(sample_env)
+        print_config_as_env(sample_env)
         sys.stdout = sys.__stdout__
         self.assertRegex(output.getvalue(), expected_output)
 
