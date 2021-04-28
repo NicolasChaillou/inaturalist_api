@@ -10,7 +10,7 @@ from unittest import main as unittest_main
 from fastapi.testclient import TestClient
 from main import app
 
-import config_helper
+import config as config_helper
 from parse_query import parse_query
 
 # No unit tests for inaturalist_oath since it is a script, not a module
@@ -61,7 +61,6 @@ class TestAPI(TestCase):
     def test_get_observations(self):
         q = {"lng": 0, "lat": 0}
         response = client.get("/observations", params=q)
-        print(response.text)
         self.assertEqual(response.status_code, 200)
         self.assertIsInstance(response.json(), dict)
 
@@ -83,7 +82,7 @@ class TestAPI(TestCase):
         response = client.get("/observations", params=q)
         self.assertEqual(response.json(), { "err": "Invalid coordinates."})
 
-class TestParse(unittest.TestCase):
+class TestParse(TestCase):
     def test_parser(self):
         response = parse_query(sample_file)
         self.assertEqual(response, sample_output)

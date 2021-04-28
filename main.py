@@ -17,7 +17,7 @@ initialize_config(config)
 
 
 @app.get("/observations")
-def get_observations(longitude: float, lat: float):
+def get_observations(lng: float, lat: float):
     headers = {"Authentication": config['access_token']}
     
     query = {
@@ -30,7 +30,7 @@ def get_observations(longitude: float, lat: float):
         "photos": "true",
         "identifications": "most_agree",
         "lat": lat,
-        "lng": longitude,
+        "lng": lng,
         "radius": 5,
         "page": 1,
         "per_page": 15,
