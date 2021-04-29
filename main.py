@@ -6,7 +6,8 @@ import threading
 import requests
 import argparse
 
-import config_helper
+from parse_query import parse_query
+from config_helper import initialize_config
 from fastapi import FastAPI
 from typing import Optional
 from dotenv import load_dotenv
@@ -14,7 +15,7 @@ load_dotenv()
 
 app = FastAPI()
 config = {}
-config_helper.initialize_config(config)
+initialize_config(config)
 
 
 def refresh_token():
@@ -50,7 +51,9 @@ def get_observations(lng: float, lat: float):
         "Accept": "application/json"
         }
 
-    q = {
+    query = {
+        "captive": "false",
+        "endemic": "true",
         "geo": "true",
         "identified": "true",
         "mappable": "true",
@@ -60,16 +63,17 @@ def get_observations(lng: float, lat: float):
         "native": "true",
         "lat": lat,
         "lng": lng,
-        "radius": 1,
+        "radius": 5,
         "page": 1,
         "per_page": 15,
         "order": "desc",
         "order_by": "created_at"
     }
-    response = requests.get(f"{config['request_endpoint']}/observations", params=q, headers=headers)
-    
+
+    response = requests.get(f"{config['request_endpoint']}/observations", params=query, headers=headers)
+
     if response.status_code == 200:
-        return response.json()
+        return parse_query(response.json())
     else:
         return { "err": f"Error retrieving request: {response.status_code}" }
 
