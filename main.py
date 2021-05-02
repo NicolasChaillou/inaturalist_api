@@ -18,16 +18,11 @@ app = FastAPI()
 config = {}
 initialize_config(config)
 
-origins = [
-    "http://localhost",
-    "http://localhost:8080",
-    "https://pokinaturalists.herokuapp.com/",
-    "https://pokinaturalists.herokuapp.com:8080"
-]
+origins = ["*"]    # Change this to specific domains to limit origins that can use this API
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
+    allow_origins=origins,
     allow_credentials=True,
     allow_methods=["GET"],
     allow_headers=["*"]
