@@ -10,6 +10,7 @@ from parse_query import parse_query
 from config_helper import initialize_config
 from fastapi import FastAPI
 from typing import Optional
+from fastapi.middleware.cors import CORSMiddleware
 from dotenv import load_dotenv
 load_dotenv()
 
@@ -17,6 +18,15 @@ app = FastAPI()
 config = {}
 initialize_config(config)
 
+origins = ["*"]    # Change this to specific domains to limit origins that can use this API
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["GET"],
+    allow_headers=["*"]
+)
 
 def refresh_token():
     '''
