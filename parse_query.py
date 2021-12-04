@@ -2,9 +2,7 @@ import os
 import json
 
 def parse_query(response):
-    result = {}
-    result['results'] = []
-
+    result = {'results': []}
     for p in response['results']:
         result['results'].append({
             'id': p['id'],
