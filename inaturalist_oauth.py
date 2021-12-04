@@ -35,7 +35,7 @@ def request_auth_code(config):
         url = f"{config['site']}/oauth/authorize?client_id={config['app_id']}&redirect_uri={config['redirect_uri']}&response_type=code"
         print(f"Click this link to approve this request:\n{url}")
 
-        redirect_uri = get_input(f"\n\nPlease enter the full redirect link: ")
+        redirect_uri = get_input('\n\nPlease enter the full redirect link: ')
         if code := code_regex.search(redirect_uri):
             auth_code = code.group(1)
         return auth_code

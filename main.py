@@ -92,6 +92,4 @@ def valid_lng_lat(lng: float, lat: float):
     '''
     Validate longitude and latitude from incoming request.
     '''
-    if (abs(lng) > 180 or abs(lat) > 90): 
-        return False
-    return True
+    return abs(lng) <= 180 and abs(lat) <= 90
